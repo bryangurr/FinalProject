@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Account</title>
+</head>
+<body>
+  <label><b>Users:</b></label>
+  <br><br>
+  <% if (users && users.length > 0) { %>
+    <% users.forEach(user => { %>
+      <label>Username: <%= user.username %></label>
+      <br>
+      <label>Email: <%= user.email %></label>
+      <br><br>
+    <% }); %>
+  <% } else { %>
+    <p>No users found.</p>
+  <% } %>
+  <form action="/" method="GET">
+    <button type="submit">Return</button>
+  </form>
+</body>
+</html>
