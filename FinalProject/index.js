@@ -114,7 +114,7 @@ app.post("/deleteUser/:id", (req, res) => {
             res.redirect('/user-management');
         })
         .catch(error => {
-            console.error('Error deleting Pokémon:', error);
+            console.error('Error deleting user:', error);
             res.status(500).send('Internal Server Error');
         });
 });
