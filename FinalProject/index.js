@@ -27,19 +27,10 @@ const knex = require("knex")({
 })
 
 app.get('/', (req, res) => {
-    const dbConfig = {
-      hostname: process.env.RDS_HOSTNAME,
-      username: process.env.RDS_USERNAME,
-      password: process.env.RDS_PASSWORD,
-      dbName: process.env.RDS_DB_NAME,
-      port: process.env.RDS_PORT,
-      ssl: process.env.DB_SSL
-    };
-  
-    console.log(dbConfig);
+
   
     // Pass dbConfig to the EJS file
-    res.render('index', { dbConfig });
+    res.render('index');
   });
 
 // Route to Login page
