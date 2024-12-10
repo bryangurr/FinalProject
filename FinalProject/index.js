@@ -63,21 +63,8 @@ app.get("/calculator", (req, res) => {
     res.render('calculator', { user: 'admin' });
 });
 
-app.get("/user-management", (req, res) => {
-    knex('users')
-        // .join('poke_type', 'pokemon.poke_type_id', '=', 'poke_type.id') // Join Pokémon with their types
-        .select(
-            '*'
-        ) // Specify the fields to retrieve
-        .then(users => {
-            res.render('manageUsers', { users }); // Render the home page with Pokémon data
-        })
-        .catch(error => {
-            console.error('Error querying database:', error);
-            res.status(500).send('Internal Server Error');
-        });
-
-
+app.get('/user-management', (req, res) => {
+    res.render("user-management");
 })
 
 app.post("/CreateAccount", (req, res) => {
