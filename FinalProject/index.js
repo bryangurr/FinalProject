@@ -4,7 +4,7 @@ let app = express();
 
 let path = require("path");
 
-require('dotenv').config();
+require("dotenv").config();
 
 const port = process.env.PORT || process.env.port_LOCAL || 5008;
 
@@ -22,8 +22,10 @@ const knex = require("knex")({
   connection: {
     host: process.env.RDS_HOSTNAME || "localhost",
     user: process.env.RDS_USERNAME || "postgres",
-    password: process.env.RDS_PASSWORD || process.env.RDS_PASSWORD_LOCAL || 'admin',
-    database: process.env.RDS_DB_NAME || process.env.RDS_DB_NAME_LOCALE || 'project3',
+    password:
+      process.env.RDS_PASSWORD || process.env.RDS_PASSWORD_LOCAL || "admin",
+    database:
+      process.env.RDS_DB_NAME || process.env.RDS_DB_NAME_LOCALE || "project3",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
@@ -55,39 +57,38 @@ app.get("/login", (req, res) => {
 //       Data to send: User type (employee/customer), name?, username?
 
 app.post("/login", (req, res) => {
-    const { username, password } = req.body; // Extract username and password
-  
-    // Query the database for the user
-    knex("userlogins") // Replace 'admin' with your table name if different
-      .where({ username }) // Check if username exists
-      .first() // Fetch the first matching record
-      .then((userlogins) => {
-        if (!userlogins) {
-          // No matching username found
-          console.error("Invalid username");
-          return res.status(401).send("Invalid username or password.");
-        }
-  
-        // Compare the entered plain-text password with the stored password
-        if (password === userlogins.password) {
-          console.log("Login successful:", username);
-  
-          // Store user info in the session
-          req.session.user = { username: userlogins.username };
-  
-          // Redirect to a protected page
-          res.redirect("/calculator");
-        } else {
-          console.error("Invalid password");
-          res.status(401).send("Invalid username or password.");
-        }
-      })
-      .catch((err) => {
-        console.error("Error during login:", err);
-        res.status(500).send("Internal server error.");
-      });
-  });
+  const { username, password } = req.body; // Extract username and password
 
+  // Query the database for the user
+  knex("userlogins") // Replace 'admin' with your table name if different
+    .where({ username }) // Check if username exists
+    .first() // Fetch the first matching record
+    .then((userlogins) => {
+      if (!userlogins) {
+        // No matching username found
+        console.error("Invalid username");
+        return res.status(401).send("Invalid username or password.");
+      }
+
+      // Compare the entered plain-text password with the stored password
+      if (password === userlogins.password) {
+        console.log("Login successful:", username);
+
+        // Store user info in the session
+        req.session.user = { username: userlogins.username };
+
+        // Redirect to a protected page
+        res.redirect("/calculator");
+      } else {
+        console.error("Invalid password");
+        res.status(401).send("Invalid username or password.");
+      }
+    })
+    .catch((err) => {
+      console.error("Error during login:", err);
+      res.status(500).send("Internal server error.");
+    });
+});
 
 // Route to account creation page
 app.get("/create-account", (req, res) => {
@@ -108,68 +109,67 @@ app.get("/calculator", (req, res) => {
 });
 
 app.get("/user-management", (req, res) => {
-    knex('userlogins')
-        .select('*')
-        .then(users => {
-            console.log(users); // Log to confirm `id` exists for each record
-            res.render('user-management', { userlogins: users });
-        })
-        .catch(error => {
-            console.error('Error querying database:', error);
-            res.status(500).send('Internal Server Error');
-        });
+  knex("userlogins")
+    .select("*")
+    .then((users) => {
+      console.log(users); // Log to confirm `id` exists for each record
+      res.render("user-management", { userlogins: users });
+    })
+    .catch((error) => {
+      console.error("Error querying database:", error);
+      res.status(500).send("Internal Server Error");
+    });
 });
 
-
 app.get("/editUser/:id", (req, res) => {
-    console.log("Route Parameter ID:", req.params.id); // Debugging
-    knex("userlogins")
-      .where({ userid: req.params.id })
-      .first()
-      .then((userlogins) => {
-        if (userlogins) {
-          console.log("Userlogins Data:", userlogins); // Debugging
-          res.render("editUser", { user: req.session.user || {}, userlogins });
-        } else {
-          console.log("No user found with ID:", req.params.id); // Debugging
-          res.status(404).send("User not found");
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching user:", err.message);
-        res.status(500).send("Internal server error.");
-      });
+  console.log("Route Parameter ID:", req.params.id); // Debugging
+  knex("userlogins")
+    .where({ userid: req.params.id })
+    .first()
+    .then((userlogins) => {
+      if (userlogins) {
+        console.log("Userlogins Data:", userlogins); // Debugging
+        res.render("editUser", { user: req.session.user || {}, userlogins });
+      } else {
+        console.log("No user found with ID:", req.params.id); // Debugging
+        res.status(404).send("User not found");
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching user:", err.message);
+      res.status(500).send("Internal server error.");
+    });
 });
 
 app.post("/editUser/:userid", (req, res) => {
-    const userid = req.params.userid;  // Get userid from URL
-    let username = req.body.username;
-    let password = req.body.password;
-    let firstname = req.body.firstname;
-    let lastname = req.body.lastname;
-    let email = req.body.email;
-    let phone = req.body.phone;
-    let usertype = req.body.usertype;
+  const userid = req.params.userid; // Get userid from URL
+  let username = req.body.username;
+  let password = req.body.password;
+  let firstname = req.body.firstname;
+  let lastname = req.body.lastname;
+  let email = req.body.email;
+  let phone = req.body.phone;
+  let usertype = req.body.usertype;
 
-    knex("userlogins")
-      .where({ "userid": userid })  // Use the userid from URL
-      .first()
-      .update({
-        username: username,
-        password: password,
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        phone: phone,
-        usertype: usertype
-      })
-      .then(() => {
-        res.redirect("/user-management");
-      })
-      .catch((error) => {
-        console.error("Error updating User:", error);
-        res.status(500).send("Internal Server Error");
-      });
+  knex("userlogins")
+    .where({ userid: userid }) // Use the userid from URL
+    .first()
+    .update({
+      username: username,
+      password: password,
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      phone: phone,
+      usertype: usertype,
+    })
+    .then(() => {
+      res.redirect("/user-management");
+    })
+    .catch((error) => {
+      console.error("Error updating User:", error);
+      res.status(500).send("Internal Server Error");
+    });
 });
 
 app.post("/CreateAccount", (req, res) => {
@@ -198,20 +198,20 @@ app.post("/CreateAccount", (req, res) => {
 });
 
 app.post("/deleteUser/:userid", (req, res) => {
-    const id = req.params.userid; // Declare 'id' first
-    console.log("ID to delete:", id); // Now you can use 'id'
-    
-    knex("userlogins")
-      .where("userid", id) // Ensure "userid" matches your database column name
-      .del()
-      .then(() => {
-        res.redirect("/user-management");
-      })
-      .catch((error) => {
-        console.error("Error deleting user:", error);
-        res.status(500).send("Internal Server Error");
-      });
-  });
+  const id = req.params.userid; // Declare 'id' first
+  console.log("ID to delete:", id); // Now you can use 'id'
+
+  knex("userlogins")
+    .where("userid", id) // Ensure "userid" matches your database column name
+    .del()
+    .then(() => {
+      res.redirect("/user-management");
+    })
+    .catch((error) => {
+      console.error("Error deleting user:", error);
+      res.status(500).send("Internal Server Error");
+    });
+});
 
 //Quote stuff//
 app.get("/submittedQuotes", (req, res) => {
@@ -227,47 +227,58 @@ app.get("/submittedQuotes", (req, res) => {
     });
 });
 
-
-
 app.get("/editQuote/:quoteid", (req, res) => {
   const quoteid = req.params.quoteid;
-  knex('quotes')
-  .leftJoin('userlogins', 'userlogins.userid', '=', 'quotes.creator')
-  .leftJoin('locationinfo', 'locationinfo.locationid', '=', 'quotes.locationid')
-  .select(
-    'quoteid',
-    'quotedescription',
-    'state',
-    'county',
-    'locationrate',
-    'quoteyear',
-    'meansurviverate',
-    'curryearseed',
-    'cappedyield',
-    'priceelectionper',
-    'expcommodvalue',
-    'firstname', 
-    'lastname'
-  )
-  .where('quoteid', quoteid)
-  .first()
-  .then(quoteInfo => {
-    res.render('editQuote', {quoteInfo})
-  })
-  .catch((error) => {
-    console.error("Error fetching quote:", error);
-    res.status(500).send("Internal Server Error");
-  });
+  knex("quotes")
+    .leftJoin("userlogins", "userlogins.userid", "=", "quotes.creator")
+    .leftJoin(
+      "locationinfo",
+      "locationinfo.locationid",
+      "=",
+      "quotes.locationid"
+    )
+    .select(
+      "quoteid",
+      "quotedescription",
+      "state",
+      "county",
+      "locationrate",
+      "quoteyear",
+      "meansurviverate",
+      "curryearseed",
+      "cappedyield",
+      "priceelectionper",
+      "expcommodvalue",
+      "firstname",
+      "lastname"
+    )
+    .where("quoteid", quoteid)
+    .first()
+    .then((quoteInfo) => {
+      res.render("editQuote", { quoteInfo });
+    })
+    .catch((error) => {
+      console.error("Error fetching quote:", error);
+      res.status(500).send("Internal Server Error");
+    });
 });
 
 app.post("/editQuote/:quoteid", (req, res) => {
-    const quoteid = req.params.quoteid;
-  });
+  const quoteid = req.params.quoteid;
+});
 
 app.post("/deleteQuote/:quoteid", (req, res) => {
   const quoteid = req.params.quoteid;
-
-  knex("quotes").where("quoteid", quoteid).del();
+  knex("quotes")
+    .where("quoteid", quoteid)
+    .del()
+    .then(() => {
+      res.redirect("/submittedQuotes");
+    })
+    .catch((error) => {
+      console.error("Error deleting quote:", error);
+      res.status(500).send("Internal Server Error");
+    });
 });
 
 app.listen(port, () =>
