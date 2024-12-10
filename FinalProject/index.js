@@ -4,7 +4,7 @@ let app = express();
 
 let path = require("path");
 
-const port = process.env.PORT || 5500;
+const port = process.env.PORT || process.env.port_LOCAL;
 
 app.set("view engine", "ejs"); // Set the view engine to expect and render ejs files
 
@@ -19,8 +19,8 @@ const knex = require("knex")({
   connection: {
     host: process.env.RDS_HOSTNAME || "localhost",
     user: process.env.RDS_USERNAME || "postgres",
-    password: process.env.RDS_PASSWORD || "Winter12!",
-    database: process.env.RDS_DB_NAME || "project3",
+    password: process.env.RDS_PASSWORD || process.env.RDS_PASSWORD_LOCAL,
+    database: process.env.RDS_DB_NAME || process.env.RDS_DB_NAME_LOCALE,
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
