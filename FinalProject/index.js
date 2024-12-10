@@ -4,6 +4,8 @@ let app = express();
 
 let path = require("path");
 
+require('dotenv').config();
+
 const port = process.env.PORT || process.env.port_LOCAL;
 
 app.set("view engine", "ejs"); // Set the view engine to expect and render ejs files
