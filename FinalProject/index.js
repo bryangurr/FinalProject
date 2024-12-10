@@ -193,13 +193,42 @@ app.get("/submittedQuotes", (req, res) => {
     });
 });
 
+
+
 app.get("/editQuote/:quoteid", (req, res) => {
   const quoteid = req.params.quoteid;
+  knex('quotes')
+  .leftJoin('userlogins', 'userlogins.userid', '=', 'quotes.creator')
+  .leftJoin('locationinfo', 'locationinfo.locationid', '=', 'quotes.locationid')
+  .select(
+    'quoteid',
+    'quotedescription',
+    'state',
+    'county',
+    'locationrate',
+    'quoteyear',
+    'meansurviverate',
+    'curryearseed',
+    'cappedyield',
+    'priceelectionper',
+    'expcommodvalue',
+    'firstname', 
+    'lastname'
+  )
+  .where('quoteid', quoteid)
+  .first()
+  .then(quoteInfo => {
+    res.render('editQuote', {quoteInfo})
+  })
+  .catch((error) => {
+    console.error("Error fetching quote:", error);
+    res.status(500).send("Internal Server Error");
+  });
 });
 
 app.post("/editQuote/:quoteid", (req, res) => {
-  const quoteid = req.params.quoteid;
-});
+    const quoteid = req.params.quoteid;
+  });
 
 app.post("/deleteQuote/:quoteid", (req, res) => {
   const quoteid = req.params.quoteid;
