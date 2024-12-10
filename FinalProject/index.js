@@ -19,7 +19,7 @@ const knex = require("knex")({
   connection: {
     host: process.env.RDS_HOSTNAME || "localhost",
     user: process.env.RDS_USERNAME || "postgres",
-    password: process.env.RDS_PASSWORD || "Winter12!",
+    password: process.env.RDS_PASSWORD || "admin",
     database: process.env.RDS_DB_NAME || "project3",
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
@@ -70,21 +70,38 @@ app.get("/calculator", (req, res) => {
 });
 
 app.get("/user-management", (req, res) => {
-    knex('users')
-        // .join('poke_type', 'pokemon.poke_type_id', '=', 'poke_type.id') // Join Pokémon with their types
-        .select(
-            '*'
-        ) // Specify the fields to retrieve
+    knex('userlogins')
+        .select('*') // Specify the fields to retrieve
         .then(users => {
-            res.render('manageUsers', { users }); // Render the home page with Pokémon data
+            res.render('user-management', { userlogins: users }); // Use the correct variable name
         })
         .catch(error => {
             console.error('Error querying database:', error);
             res.status(500).send('Internal Server Error');
         });
+});
+
+app.get("/editUser/:id", (req, res) => {
+    console.log("Route Parameter ID:", req.params.id); // Debugging
+    knex("userlogins")
+      .where({ userid: req.params.id })
+      .first()
+      .then((userlogins) => {
+        if (userlogins) {
+          console.log("Userlogins Data:", userlogins); // Debugging
+          res.render("editUser", { user: req.session.user || {}, userlogins });
+        } else {
+          console.log("No user found with ID:", req.params.id); // Debugging
+          res.status(404).send("User not found");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching user:", err.message);
+        res.status(500).send("Internal server error.");
+      });
+});
 
 
-})
 
 app.post("/CreateAccount", (req, res) => {
   let sFirstName = req.body.first_name;
@@ -113,7 +130,7 @@ app.post("/CreateAccount", (req, res) => {
 
 app.post("/deleteUser/:id", (req, res) => {
   const id = req.params.id;
-  knex("users")
+  knex("userlogins")
     .where("id", id)
     .del()
     .then(() => {

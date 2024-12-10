@@ -37,27 +37,26 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th>Email</th>
+        <th>Phone</th>
         <th>User Type</th>
         <th>Actions</th>
         <!-- <th>Actions</th> -->
       </tr>
     </thead>
     <tbody>
-      <% if (users.length > 0) { %>
-        <% users.forEach(row => { %>
+      <% if (userlogins.length > 0) { %>
+        <% userlogins.forEach(row => { %>
           <tr>
-            <input type="hidden" value="row.id">
-            <input type="hidden" value="row.poke_type_id">
+            <input type="hidden" value="row.userid">
+            
             <td><%= row.username %></td>
             <td><%= row.password %></td>
-            <td><%= row.first_name %></td>
-            <td><%= row.last_name %></td> <!-- Format date: Makes it MM/DD/YYYY -->
+            <td><%= row.firstname %></td>
+            <td><%= row.lastname %></td> <!-- Format date: Makes it MM/DD/YYYY -->
             <td><%= row.email %></td>
-            <td><%= row.user_type %></td>
+            <td><%= row.phone %></td>
+            <td><%= row.usertype %></td>
             <td>
-              <form action="/user/<%= row.id %>" method="GET" style="display:inline;">
-                <button type="submit">View</button>
-              </form>
               <form action="/editUser/<%= row.id %>" method="GET" style="display:inline;">
                 <button type="submit">Edit</button>
               </form>
