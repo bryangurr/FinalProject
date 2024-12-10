@@ -6,7 +6,7 @@ let path = require("path");
 
 require('dotenv').config();
 
-const port = process.env.PORT || process.env.port_LOCAL;
+const port = process.env.PORT || process.env.port_LOCAL || 5008;
 
 app.set("view engine", "ejs"); // Set the view engine to expect and render ejs files
 
@@ -21,12 +21,23 @@ const knex = require("knex")({
   connection: {
     host: process.env.RDS_HOSTNAME || "localhost",
     user: process.env.RDS_USERNAME || "postgres",
-    password: process.env.RDS_PASSWORD || process.env.RDS_PASSWORD_LOCAL,
-    database: process.env.RDS_DB_NAME || process.env.RDS_DB_NAME_LOCALE,
+    password: process.env.RDS_PASSWORD || process.env.RDS_PASSWORD_LOCAL || 'admin',
+    database: process.env.RDS_DB_NAME || process.env.RDS_DB_NAME_LOCALE || 'project3',
     port: process.env.RDS_PORT || 5432,
     ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : false,
   },
 });
+
+const session = require("express-session");
+
+app.use(
+  session({
+    secret: "Fortnite", // Replace with a secure secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to `true` if using HTTPS
+  })
+);
 
 app.get("/", (req, res) => {
   // Pass dbConfig to the EJS file
@@ -41,17 +52,41 @@ app.get("/login", (req, res) => {
 // Login page submission.
 // TODO: validate username and password in DB and don't send over the password.
 //       Data to send: User type (employee/customer), name?, username?
+
 app.post("/login", (req, res) => {
-  let sUsername = req.body.username;
-  let sPassword = req.body.password;
-  let sUserType = "admin";
-  console.log("Login received!");
-  res.render("calculator", {
-    sUsername: sUsername,
-    sPassword: sPassword,
-    sUserType: sUserType,
+    const { username, password } = req.body; // Extract username and password
+  
+    // Query the database for the user
+    knex("userlogins") // Replace 'admin' with your table name if different
+      .where({ username }) // Check if username exists
+      .first() // Fetch the first matching record
+      .then((userlogins) => {
+        if (!userlogins) {
+          // No matching username found
+          console.error("Invalid username");
+          return res.status(401).send("Invalid username or password.");
+        }
+  
+        // Compare the entered plain-text password with the stored password
+        if (password === userlogins.password) {
+          console.log("Login successful:", username);
+  
+          // Store user info in the session
+          req.session.user = { username: userlogins.username };
+  
+          // Redirect to a protected page
+          res.redirect("/calculator");
+        } else {
+          console.error("Invalid password");
+          res.status(401).send("Invalid username or password.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error during login:", err);
+        res.status(500).send("Internal server error.");
+      });
   });
-});
+
 
 // Route to account creation page
 app.get("/create-account", (req, res) => {
