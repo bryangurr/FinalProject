@@ -70,17 +70,21 @@ app.get("/calculator", (req, res) => {
 });
 
 app.get("/user-management", (req, res) => {
-  knex("users")
-    // .join('poke_type', 'pokemon.poke_type_id', '=', 'poke_type.id') // Join Pokémon with their types
-    .select("*") // Specify the fields to retrieve
-    .then((users) => {
-      res.render("manageUsers", { users }); // Render the home page with Pokémon data
-    })
-    .catch((error) => {
-      console.error("Error querying database:", error);
-      res.status(500).send("Internal Server Error");
-    });
-});
+    knex('users')
+        // .join('poke_type', 'pokemon.poke_type_id', '=', 'poke_type.id') // Join Pokémon with their types
+        .select(
+            '*'
+        ) // Specify the fields to retrieve
+        .then(users => {
+            res.render('manageUsers', { users }); // Render the home page with Pokémon data
+        })
+        .catch(error => {
+            console.error('Error querying database:', error);
+            res.status(500).send('Internal Server Error');
+        });
+
+
+})
 
 app.post("/CreateAccount", (req, res) => {
   let sFirstName = req.body.first_name;
