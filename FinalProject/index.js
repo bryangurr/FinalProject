@@ -12,6 +12,7 @@ app.set("view engine", "ejs"); // Set the view engine to expect and render ejs f
 
 app.set("views", path.join(__dirname, "views")); // Tells the engine to look for view in the view folder
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "styles"))); // tells app to serve static css files
 app.use("/images", express.static(path.join(__dirname, "images")));
@@ -108,15 +109,17 @@ app.get("/calculator", (req, res) => {
 
 app.get("/user-management", (req, res) => {
     knex('userlogins')
-        .select('*') // Specify the fields to retrieve
+        .select('*')
         .then(users => {
-            res.render('user-management', { userlogins: users }); // Use the correct variable name
+            console.log(users); // Log to confirm `id` exists for each record
+            res.render('user-management', { userlogins: users });
         })
         .catch(error => {
             console.error('Error querying database:', error);
             res.status(500).send('Internal Server Error');
         });
 });
+
 
 app.get("/editUser/:id", (req, res) => {
     console.log("Route Parameter ID:", req.params.id); // Debugging
@@ -138,7 +141,36 @@ app.get("/editUser/:id", (req, res) => {
       });
 });
 
+app.post("/editUser/:userid", (req, res) => {
+    const userid = req.params.userid;  // Get userid from URL
+    let username = req.body.username;
+    let password = req.body.password;
+    let firstname = req.body.firstname;
+    let lastname = req.body.lastname;
+    let email = req.body.email;
+    let phone = req.body.phone;
+    let usertype = req.body.usertype;
 
+    knex("userlogins")
+      .where({ "userid": userid })  // Use the userid from URL
+      .first()
+      .update({
+        username: username,
+        password: password,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        phone: phone,
+        usertype: usertype
+      })
+      .then(() => {
+        res.redirect("/user-management");
+      })
+      .catch((error) => {
+        console.error("Error updating User:", error);
+        res.status(500).send("Internal Server Error");
+      });
+});
 
 app.post("/CreateAccount", (req, res) => {
   let sFirstName = req.body.first_name;
@@ -165,19 +197,21 @@ app.post("/CreateAccount", (req, res) => {
     });
 });
 
-app.post("/deleteUser/:id", (req, res) => {
-  const id = req.params.id;
-  knex("userlogins")
-    .where("id", id)
-    .del()
-    .then(() => {
-      res.redirect("/user-management");
-    })
-    .catch((error) => {
-      console.error("Error deleting user:", error);
-      res.status(500).send("Internal Server Error");
-    });
-});
+app.post("/deleteUser/:userid", (req, res) => {
+    const id = req.params.userid; // Declare 'id' first
+    console.log("ID to delete:", id); // Now you can use 'id'
+    
+    knex("userlogins")
+      .where("userid", id) // Ensure "userid" matches your database column name
+      .del()
+      .then(() => {
+        res.redirect("/user-management");
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+        res.status(500).send("Internal Server Error");
+      });
+  });
 
 //Quote stuff//
 app.get("/submittedQuotes", (req, res) => {
