@@ -121,6 +121,7 @@ app.post("/deleteUser/:id", (req, res) => {
     });
 });
 
+//Quote stuff//
 app.get("/submittedQuotes", (req, res) => {
   knex("quotes")
     .join("userlogins", "quotes.creator", "userlogins.userid")
@@ -132,6 +133,20 @@ app.get("/submittedQuotes", (req, res) => {
       console.error("Error fetching quotes:", error);
       res.status(500).send("Internal Server Error");
     });
+});
+
+app.get("/editQuote/:quoteid", (req, res) => {
+  const quoteid = req.params.quoteid;
+});
+
+app.post("/editQuote/:quoteid", (req, res) => {
+  const quoteid = req.params.quoteid;
+});
+
+app.post("/deleteQuote/:quoteid", (req, res) => {
+  const quoteid = req.params.quoteid;
+
+  knex("quotes").where("quoteid", quoteid).del();
 });
 
 app.listen(port, () =>
