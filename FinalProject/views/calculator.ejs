@@ -64,10 +64,20 @@
       <p><strong>Expected Commodity Value:</strong> <span id="expectedValue">--</span></p>
     </div>
 <br>
-    <button type="button" class="button" id="calculateBtn">Calculate</button>
+    <button type="button" class="button" id="calculateBtn" onclick="calculate()">Calculate</button>
     <button type="submit" class="button">Submit</button>
   </form>
 
-  
+
+  <script>
+    function calculate() {
+    let locationid = document.getElementById('locationid');
+    locationInfo.forEach(location => {
+      if (locationInfo.locationid == locationid) {
+        alert('Location: ' + locationInfo.county);
+      }
+    })
+    }
+  </script>
 </body>
 </html>
