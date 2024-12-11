@@ -123,17 +123,18 @@ app.get("/editUser/:id", (req, res) => {
     });
 });
 
-app.post("/editUser/:id", (req, res) => {
-  console.log("User data sent to template:", userlogins);
-  let username = req.body.username;
-  let password = req.body.password;
-  let firstname = req.body.firstname;
-  let lastname = req.body.lastname;
-  let email = req.body.email;
-  let phone = req.body.phone;
+app.post("/editUser/:userid", (req, res) => {
+  console.log("User data sent to template:", req.body);
+  const userid = req.params.userid;
+  const username = req.body.username;
+  const password = req.body.password;
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const email = req.body.email;
+  const phone = req.body.phone;
 
   knex("userlogins")
-    .where({ id: userid }) // Use the userid from URL
+    .where( 'userid', userid ) // Use the userid from URL
     .first()
     .update({
       username: username,
