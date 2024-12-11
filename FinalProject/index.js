@@ -304,7 +304,8 @@ app.get("/addQuote", isAuthenticated, (req, res) => {
 });
 
 app.get("/calculator", isAuthenticated, (req, res) => {
-
+    knex('locationinfo')
+    .select('*')
     res.render("calculator", { user: "admin" });
 });
 
