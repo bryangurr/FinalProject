@@ -7,12 +7,22 @@
     <link rel="stylesheet" href="/edit.css">
 </head>
 <body>
-    <h1>Edit Quote</h1>
-    <form action="/updateQuote/<%= quoteInfo.quoteid %>" method="POST">
-        <div>
-            <label for="quotedescription">Quote Description:</label>
-            <textarea id="quotedescription" name="quotedescription" required><%= quoteInfo.quotedescription %></textarea>
+    <header>
+        <div class="banner">
+            <div class="left-buttons">
+                <button onclick="window.location.href='/submittedQuotes'" class="button">Back to Quotes</button>
+            </div>
+            <h1>Edit Quote</h1>
         </div>
+    </header>
+
+    <main>
+        <form action="/updateQuote/<%= quoteInfo.quoteid %>" method="POST" class="edit-form">
+            <!-- Quote Description -->
+            <div class="form-group">
+                <label for="quotedescription">Quote Description:</label>
+                <textarea id="quotedescription" name="quotedescription" required><%= quoteInfo.quotedescription %></textarea>
+            </div>
 
             <!-- Location -->
             <div class="form-group">
@@ -48,10 +58,12 @@
                 <p class="creator"><%= quoteInfo.firstname %> <%= quoteInfo.lastname %></p>
             </div>
 
-        <div>
-            <button type="submit">Update Quote</button>
-            <a href="/quotes">Cancel</a> <!-- Optional: Link back to quotes list -->
-        </div>
-    </form>
+            <!-- Form Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="button">Update Quote</button>
+                <a href="/submittedQuotes" class="button cancel-button">Cancel</a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
