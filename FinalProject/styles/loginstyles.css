@@ -16,10 +16,13 @@ body {
 
 /* Logo Styling */
 .login-logo img {
-    width: 150px;
+    width: 200px; /* Increase the size of the image */
     height: auto;
     margin-bottom: 2rem;
+    position: relative;
+    right: -20px; /* Shift the image to the right */
 }
+
 
 /* Login Box Styling */
 .login-box {
