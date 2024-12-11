@@ -134,7 +134,7 @@ app.post("/editUser/:userid", (req, res) => {
   const phone = req.body.phone;
 
   knex("userlogins")
-    .where( 'userid', userid ) // Use the userid from URL
+    .where("userid", userid) // Use the userid from URL
     .first()
     .update({
       username: username,
@@ -320,6 +320,69 @@ app.post("/getLocationInfo", (req, res) => {
       console.error("Error fetching location info:", error);
       res.status(500).json({ message: "Internal server error." });
     });
+});
+
+//SEARCH ROUTES
+app.get("/searchQuotes", async (req, res) => {
+  const { name } = req.query;
+
+  try {
+    const quotes = await knex("quotes")
+      .leftJoin("userlogins", "userlogins.userid", "=", "quotes.creator")
+      .select(
+        "quotes.quoteid",
+        "quotes.quotedescription",
+        "quotes.quoteyear",
+        "userlogins.firstname",
+        "userlogins.lastname"
+      )
+      .whereRaw("LOWER(CONCAT(firstname, ' ', lastname)) LIKE ?", [
+        `%${name.toLowerCase()}%`,
+      ])
+      .orWhereRaw("LOWER(firstname) LIKE ?", [`%${name.toLowerCase()}%`])
+      .orWhereRaw("LOWER(lastname) LIKE ?", [`%${name.toLowerCase()}%`]);
+
+    res.render("submittedQuotes", { quotes });
+  } catch (error) {
+    console.error("Error searching quotes:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/searchUsers", async (req, res) => {
+  const { firstName, lastName } = req.query;
+
+  try {
+    const query = knex("userlogins").select(
+      "userid",
+      "username",
+      "password",
+      "firstname",
+      "lastname",
+      "email",
+      "phone",
+      "usertype"
+    );
+
+    if (firstName) {
+      query.whereRaw("LOWER(firstname) LIKE ?", [
+        `%${firstName.toLowerCase()}%`,
+      ]);
+    }
+
+    if (lastName) {
+      query.andWhereRaw("LOWER(lastname) LIKE ?", [
+        `%${lastName.toLowerCase()}%`,
+      ]);
+    }
+
+    const userlogins = await query;
+
+    res.render("userManagement", { userlogins });
+  } catch (error) {
+    console.error("Error searching users:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.listen(port, () =>

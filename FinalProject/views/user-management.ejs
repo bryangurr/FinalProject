@@ -18,7 +18,38 @@
         <button onclick="window.location.href='/createAccount'" class="button">Add User</button>
       </div>
     </div>
+
+    <!--search bar-->
+    <form action="/searchUsers" method="GET" class="search-form">
+      <label for="searchFirstName">First Name:</label>
+      <input type="text" id="searchFirstName" name="firstName" placeholder="Enter first name">
+  
+      <label for="searchLastName">Last Name:</label>
+      <input type="text" id="searchLastName" name="lastName" placeholder="Enter last name">
+  
+      <button type="submit" class="button-small">Search</button>
+    </form>
+
   </header>
+  <style>
+    .search-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.search-form input {
+    padding: 5px;
+    font-size: 1rem;
+}
+
+.search-form button {
+    padding: 5px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+  </style>
 
   <!-- User Records Table -->
   <main>
