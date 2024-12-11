@@ -379,7 +379,7 @@ app.get("/logout", (req, res) => {
           console.error("Error logging out:", err);
           res.status(500).send("Error logging out.");
       } else {
-          res.redirect("/login");
+          res.redirect("/");
       }
   });
 });
