@@ -48,15 +48,6 @@
                 <input type="tel" id="phone" name="phone" value="<%= userlogins.phone %>" required>
             </div>
 
-            <!-- User Type -->
-            <div class="form-group">
-                <label for="usertype">User Type</label>
-                <select id="usertype" name="usertype" required>
-                    <option value="Admin" <%= userlogins.usertype === 'Admin' ? 'selected' : '' %>>Admin</option>
-                    <option value="User" <%= userlogins.usertype === 'User' ? 'selected' : '' %>>User</option>
-                </select>
-            </div>
-
             <!-- Buttons -->
             <div class="form-buttons">
                 <button type="submit" class="button">Save Changes</button>
