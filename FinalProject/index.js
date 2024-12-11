@@ -92,9 +92,7 @@ app.post("/login", (req, res) => {
 
 
 
-app.get("/calculator", (req, res) => {
-  res.render("calculator", { user: "admin" });
-});
+
 
 app.get("/user-management", (req, res) => {
   knex("userlogins")
@@ -130,18 +128,16 @@ app.get("/editUser/:id", (req, res) => {
 });
 
 app.post("/editUser/:id", (req, res) => {
-    console.log("Editing user with ID:", userid);
-  const userid = req.params.id; // Get userid from URL
+    console.log("User data sent to template:", userlogins);
   let username = req.body.username;
   let password = req.body.password;
   let firstname = req.body.firstname;
   let lastname = req.body.lastname;
   let email = req.body.email;
   let phone = req.body.phone;
-  let usertype = req.body.usertype;
 
   knex("userlogins")
-    .where({ userid: userid }) // Use the userid from URL
+    .where({ id: userid }) // Use the userid from URL
     .first()
     .update({
       username: username,
@@ -149,8 +145,7 @@ app.post("/editUser/:id", (req, res) => {
       firstname: firstname,
       lastname: lastname,
       email: email,
-      phone: phone,
-      usertype: usertype,
+      phone: phone
     })
     .then(() => {
       res.redirect("/user-management");
@@ -275,6 +270,34 @@ app.post("/deleteQuote/:quoteid", (req, res) => {
       res.status(500).send("Internal Server Error");
     });
 });
+
+
+
+app.get("/calculator", (req, res) => {
+    res.render("calculator", { user: "admin" });
+  });
+
+  app.post("/getLocationInfo", (req, res) => {
+    const { state, county } = req.body;
+  
+    knex("LocationInfo")
+      .where({ state, county })
+      .first()
+      .then(location => {
+        if (location) {
+          res.json({
+            locationId: location.id,
+            locationRate: location.rate,
+          });
+        } else {
+          res.status(404).json({ message: "Location not found." });
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching location info:", error);
+        res.status(500).json({ message: "Internal server error." });
+      });
+  });
 
 app.listen(port, () =>
   console.log(`Server is running at http://localhost:${port}`)

@@ -21,13 +21,39 @@
       </div>
     </div>
   </header>
+  <script>
+    // Function to update the county options based on the selected state
+    function updateCountyOptions() {
+      const state = document.getElementById('state').value;
+      const countySelect = document.getElementById('county');
+      countySelect.innerHTML = ''; // Clear previous options
+
+      if (state === 'Florida') {
+        const floridaCounties = ['Gulf', 'Wakulla', 'Indian River'];
+        floridaCounties.forEach(county => {
+          countySelect.innerHTML += `<option value="${county}">${county}</option>`;
+        });
+      } else if (state === 'Alabama') {
+        const alabamaCounties = ['Mobile', 'Baldwin'];
+        alabamaCounties.forEach(county => {
+          countySelect.innerHTML += `<option value="${county}">${county}</option>`;
+        });
+      }
+    }
+  </script>
 
   <form id="quoteForm" method="POST" action="/submitQuote">
     <label for="description">Quote Description</label>
     <input type="text" id="description" name="description" required>
 
-    <label for="location">Location</label>
-    <input type="text" id="location" name="location" required>
+    <label for="state">State</label>
+    <select id="state" name="state" required onchange="updateCountyOptions()">
+      <option value="Florida">Florida</option>
+      <option value="Alabama">Alabama</option>
+    </select>
+
+    <label for="county">County</label>
+    <select id="county" name="county" required></select>
 
     <label for="quoteYear">Quote Year</label>
     <input type="number" id="quoteYear" name="quoteYear" value="<%= new Date().getFullYear() %>" readonly>
@@ -37,6 +63,21 @@
 
     <label for="seedPurchased">Oyster Seed Purchased</label>
     <input type="number" id="seedPurchased" name="seedPurchased" required>
+
+    <label for="meanSurvivalRate">Mean Survival Rate</label>
+<input type="number" id="meanSurvivalRate" name="meanSurvivalRate" step="0.01" min="0" max="1" value="0.95" required>
+
+<label for="cappedYield">Capped Yield</label>
+<input type="number" id="cappedYield" name="cappedYield" required>
+
+<label for="locationRate">Location Rate</label>
+<input type="number" id="locationRate" name="locationRate" readonly>
+
+<!-- Hidden field to store locationId -->
+<input type="hidden" id="locationId" name="locationId">
+
+<!-- Hidden field to store creator (current user's info) -->
+<!-- <input type="hidden" id="creator" name="creator" value=""> -->
 
     <div class="output-fields">
       <p><strong>Expected Yield:</strong> <span id="expectedYield">--</span></p>
@@ -48,18 +89,40 @@
   </form>
 
   <script>
-    document.getElementById("calculateBtn").addEventListener("click", () => {
-      const numOysters = parseFloat(document.getElementById("numOysters").value) || 0;
-      const seedPurchased = parseFloat(document.getElementById("seedPurchased").value) || 0;
+document.getElementById("calculateBtn").addEventListener("click", () => {
+  const numOysters = parseFloat(document.getElementById("numOysters").value) || 0;
+  const seedPurchased = parseFloat(document.getElementById("seedPurchased").value) || 0;
+  const meanSurvivalRate = parseFloat(document.getElementById("meanSurvivalRate").value) || 0;
+  const cappedYield = parseFloat(document.getElementById("cappedYield").value) || 0;
+  
+  // Fetch locationId and locationRate based on state and county
+  fetch("/getLocationInfo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      state: document.getElementById("state").value,
+      county: document.getElementById("county").value,
+    }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data && data.locationId && data.locationRate) {
+      document.getElementById("locationId").value = data.locationId;
+      document.getElementById("locationRate").value = data.locationRate;
 
-      // Placeholder for your calculation logic
-      const expectedYield = numOysters * 0.8; // Example calculation
-      const expectedValue = seedPurchased * 5; // Example calculation
-
-      // Output results
-      document.getElementById("expectedYield").textContent = expectedYield.toFixed(2);
-      document.getElementById("expectedValue").textContent = `$${expectedValue.toFixed(2)}`;
-    });
+      // Calculate Expected Commodity Value
+      const expectedCommodityValue = numOysters * seedPurchased * meanSurvivalRate * data.locationRate;
+      document.getElementById("expectedValue").textContent = `$${expectedCommodityValue.toFixed(2)}`;
+    } else {
+      console.error("Location data not found.");
+    }
+  })
+  .catch(error => {
+    console.error("Error fetching location info:", error);
+  });
+});
   </script>
 </body>
 </html>
