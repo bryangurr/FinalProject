@@ -29,7 +29,7 @@
     <label for="locationid">Location:</label>
                 <select id="locationid" name="locationid" required>
                     <% locationInfo.forEach(location => { %>
-                        <option value="<%= location.locationid %>" <%= location.locationid === quoteInfo.locationid ? 'selected' : '' %>>
+                        <option value="<%= location.locationid %>">
                             <%= location.county %>, <%= location.state %>
                         </option>
                     <% }) %>
