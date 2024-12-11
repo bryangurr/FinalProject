@@ -307,27 +307,6 @@ app.get("/calculator", isAuthenticated, (req, res) => {
   res.render("calculator", { user: "admin" });
 });
 
-app.post("/getLocationInfo", isAuthenticated, (req, res) => {
-  const { state, county } = req.body;
-
-  knex("LocationInfo")
-    .where({ state, county })
-    .first()
-    .then((location) => {
-      if (location) {
-        res.json({
-          locationId: location.id,
-          locationRate: location.rate,
-        });
-      } else {
-        res.status(404).json({ message: "Location not found." });
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching location info:", error);
-      res.status(500).json({ message: "Internal server error." });
-    });
-});
 
 app.listen(port, () =>
   console.log(`Server is running at http://localhost:${port}`)
