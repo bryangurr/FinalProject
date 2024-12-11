@@ -4,78 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submitted Quotes</title>
-    <style>
-        table {
-          width: 80%;
-          margin: 20px auto;
-          border-collapse: collapse;
-          font-size: 10px; /* Reduce the font size of the table */
-        }
-        th, td {
-          border: 1px solid #ddd;
-          padding: 5px; /* Reduce the padding to decrease row height */
-          text-align: center;
-          line-height: 1.2; /* Adjust line height for smaller rows */
-        }
-        th {
-          background-color: #F2F2F2;
-          font-weight: bold;
-        }
-        button {
-          padding: 4px 8px; /* Adjust button size */
-          margin: 2px;
-          font-size: 12px; /* Adjust button font size */
-          cursor: pointer;
-        }
-      </style>
+    <link rel="stylesheet" href="submittedQuotes.css">
 </head>
 <body>
+    <!-- Header Banner -->
+    <header>
+        <div class="banner">
+            <div class="left-buttons">
+                <button onclick="window.location.href='/calculator'" class="button">Back to Calculator</button>
+            </div>
+            <h1>Submitted Quotes</h1>
+            <div class="right-buttons">
+                <button onclick="window.location.href='/addQuote'" class="button">Add Quote</button>
+            </div>
+        </div>
+    </header>
 
-      <h1 style="text-align: center;">Submitted Quotes</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Quote Description</th>
-            <th>Quote Year</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (quotes.length > 0) { %>
-            <% quotes.forEach(row => { %>
-              <tr>
-                <input type="hidden" value="row.quoteid">
-                <td><%= row.firstname %></td>
-                <td><%= row.lastname %></td>
-                <td><%= row.quotedescription %></td>
-                <td><%= row.quoteyear %></td>
-                <td>
-                  <!-- <form action="/user/<%= row.id %>" method="GET" style="display:inline;">
-                    <button type="submit">View</button>
-                  </form> -->
-                  <form action="/editQuote/<%= row.quoteid %>" method="GET" style="display:inline;">
-                    <button type="submit">Edit Quote</button>
-                  </form>
-                  <form action="/deleteQuote/<%= row.quoteid %>" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
-                  </form>
-                </td>
-              </tr>
-            <% }) %>
-          <% } else { %>
-            <tr>
-              <td colspan="7">No data available</td>
-            </tr>
-          <% } %>
-        </tbody>
-      </table>
-      <form action="/addQuote" method="GET" style="display: flex; justify-content: center; margin: 20px 0;">
-        <button type="submit">Add Quote</button>
-      </form>
-
-
-
+    <!-- Submitted Quotes Table -->
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Quote Description</th>
+                    <th>Quote Year</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (quotes.length > 0) { %>
+                    <% quotes.forEach(row => { %>
+                        <tr>
+                            <td><%= row.firstname %></td>
+                            <td><%= row.lastname %></td>
+                            <td><%= row.quotedescription %></td>
+                            <td><%= row.quoteyear %></td>
+                            <td>
+                                <form action="/editQuote/<%= row.quoteid %>" method="GET" style="display:inline;">
+                                    <button type="submit" class="button-small">Edit Quote</button>
+                                </form>
+                                <form action="/deleteQuote/<%= row.quoteid %>" method="POST" style="display:inline;">
+                                    <button type="submit" class="button-small" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5">No data available</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </main>
 </body>
 </html>
