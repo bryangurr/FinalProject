@@ -4,81 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quote Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .header button {
-      background-color: #2e8b57;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .header button:hover {
-      background-color: #1c5f3b;
-    }
-    form {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .output-fields {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #eee;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-    }
-    .output-fields p {
-      margin: 5px 0;
-    }
-    .submit-btn {
-      margin-top: 15px;
-      background-color: #2e8b57;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .submit-btn:hover {
-      background-color: #1c5f3b;
-    }
-  </style>
+  <link rel="stylesheet" href="calculator.css">
 </head>
 <body>
-  <div class="header">
-    <button onclick="window.location.href='/user-management'">Manage Users</button>
-    <form action="/" method="GET" style="display:inline;">
-        <button type="submit">Back to Home</button>
-      </form>
-    <button onclick="window.location.href='/submittedQuotes'">Manage Quotes</button>
-  </div>
+  <header>
+    <div class="banner">
+      <!-- Left Side (Back to Home) -->
+      <div class="left-buttons">
+        <button onclick="window.location.href='/'" class="button">Back to Home</button>
+      </div>
+
+      <!-- Right Side (Manage Users and Quotes) -->
+      <div class="right-buttons">
+        <button onclick="window.location.href='/user-management'" class="button">Manage Users</button>
+        <button onclick="window.location.href='/submittedQuotes'" class="button">Manage Quotes</button>
+      </div>
+    </div>
+  </header>
 
   <form id="quoteForm" method="POST" action="/submitQuote">
     <label for="description">Quote Description</label>
