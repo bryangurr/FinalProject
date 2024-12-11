@@ -1,180 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-    <link rel="icon" href="/1507115.png" type="image/png">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Event</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #004d40 0%, #66bb6a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        .container {
-            background-color: white;
-            width: 100%;
-            max-width: 600px;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        .form-title {
-            text-align: center;
-            color: #004d40;
-            margin-bottom: 1.5rem;
-            font-size: 2.25rem;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #004d40;
-            font-weight: 600;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #66bb6a;
-            border-radius: 6px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #004d40;
-            box-shadow: 0 0 0 3px rgba(0, 77, 64, 0.2);
-        }
-        .name-row {
-            display: flex;
-            gap: 1rem;
-        }
-        .name-row > div {
-            flex: 1;
-        }
-        .location-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 1rem;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px; /* Space between buttons */
-            margin-top: 1.5rem;
-        }
-        .submit-btn {
-            padding: 1rem;
-            background-color: #004d40;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            flex: 1; /* Make buttons the same size */
-            text-align: center;
-        }
-        .submit-btn:hover {
-            background-color: #66bb6a;
-            transform: scale(1.02);
-        }
-        .submit-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.4);
-        }
-        .btn.delete {
-            padding: 1rem;
-            background-color: #e57373;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            flex: 1; /* Make buttons the same size */
-            text-align: center;
-        }
-        .btn.delete:hover {
-            background-color: #d32f2f;
-            transform: scale(1.02);
-        }
-        .btn.delete:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.4);
-        }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .checkbox-group input {
-            margin-right: 0.5rem;
-        }
-    </style>
+    <title>Edit User</title>
+    <link rel="stylesheet" href="/edit.css">
 </head>
 <body>
-    
-    <div class="container">
-        <h2 class="form-title">Edit User</h2>
-        <form action="/editUser/<%= userlogins.userid %>" method="POST">
-        
-            
-            <div class="location-row">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" value="<%= userlogins.username %>" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="text" id="password" name="password" value="<%= userlogins.password %>" required>
-                </div>
-                <div class="form-group">
-                    <label for="firstname">First Name</label>
-                    <input type="text" id="firstname" name="firstname" value="<%= userlogins.firstname %>" required>
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Last Name</label>
-                    <input type="text" id="lastname" name="lastname" value="<%= userlogins.lastname %>" required>
-                </div>
+    <header>
+        <div class="banner">
+            <div class="left-buttons">
+                <button onclick="window.location.href='/user-management'" class="button">Back to User Management</button>
             </div>
+            <h1>Edit User</h1>
+        </div>
+    </header>
 
-            <div class="name-row">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" name="email" value="<%= userlogins.email %>" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone"> Phone Number</label>
-                    <input type="number" id="phone" name="phone" value="<%= userlogins.phone %>"required>
-                </div>
-            </div>
-
+    <main>
+        <form action="/editUser/<%= userlogins.userid %>" method="POST" class="edit-form">
+            <!-- Username and Password -->
             <div class="form-group">
-                <label for="usertype">User Type</label>
-                <select id="usertype" name="usertype" required>
-                    <option value="Admin" <%= userlogins.usertype === 'Admin' ? 'selected' : '' %>>Admin</option>
-                    <option value="User" <%= userlogins.usertype === 'User' ? 'selected' : '' %>>User</option>
-                </select>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="<%= userlogins.username %>" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="text" id="password" name="password" value="<%= userlogins.password %>" required>
             </div>
 
-            
-            <div class="button-container">
-                <button type="submit" class="submit-btn">Save Changes</button>
+            <!-- First Name and Last Name -->
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" value="<%= userlogins.firstname %>" required>
+            </div>
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" value="<%= userlogins.lastname %>" required>
+            </div>
+
+            <!-- Email and Phone -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="<%= userlogins.email %>" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" value="<%= userlogins.phone %>" required>
+            </div>
+
+            <!-- Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="button">Save Changes</button>
+                <a href="/user-management" class="button cancel-button">Cancel</a>
             </div>
         </form>
-    </div>
+    </main>
 </body>
 </html>

@@ -64,6 +64,7 @@ main {
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s ease;
     font-size: 1rem;
+    text-decoration: none;
 }
 
 .auth-buttons .button:hover {
@@ -137,3 +138,16 @@ footer {
         margin-bottom: 20px;
     }
 }
+
+.image-container {
+    text-align: center; /* Center the image horizontally */
+    margin: 30px 0; /* Add spacing above and below the image */
+}
+
+.oyster-image {
+    max-width: 65%; /* Adjust width to fit within the container */
+    height: auto; /* Maintain the image's aspect ratio */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a subtle shadow */
+}
+

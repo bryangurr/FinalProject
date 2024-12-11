@@ -52,6 +52,13 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
+function isAuthenticated(req, res, next) {
+    if (req.session.user) {
+      return next(); // User is authenticated, proceed
+    }
+    res.redirect("/login"); // Redirect to login if not authenticated
+  };
+
 // Login page submission.
 // TODO: validate username and password in DB and don't send over the password.
 //       Data to send: User type (employee/customer), name?, username?
@@ -90,7 +97,7 @@ app.post("/login", (req, res) => {
     });
 });
 
-app.get("/user-management", (req, res) => {
+app.get("/user-management", isAuthenticated, (req, res) => {
   knex("userlogins")
     .select("*")
     .then((users) => {
@@ -103,7 +110,7 @@ app.get("/user-management", (req, res) => {
     });
 });
 
-app.get("/editUser/:id", (req, res) => {
+app.get("/editUser/:id", isAuthenticated, (req, res) => {
   console.log("Route Parameter ID:", req.params.id); // Debugging
   knex("userlogins")
     .where({ userid: req.params.id })
@@ -123,7 +130,7 @@ app.get("/editUser/:id", (req, res) => {
     });
 });
 
-app.post("/editUser/:userid", (req, res) => {
+app.post("/editUser/:userid", isAuthenticated, (req, res) => {
   console.log("User data sent to template:", req.body);
   const userid = req.params.userid;
   const username = req.body.username;
@@ -154,11 +161,11 @@ app.post("/editUser/:userid", (req, res) => {
 });
 
 // Route to account creation page
-app.get("/createAccount", (req, res) => {
+app.get("/createAccount", isAuthenticated, (req, res) => {
   res.render("createAccount");
 });
 
-app.post("/CreateAccount", (req, res) => {
+app.post("/CreateAccount", isAuthenticated, (req, res) => {
   let sFirstName = req.body.firstname;
   let sLastName = req.body.lastname;
   let sEmail = req.body.email;
@@ -183,7 +190,7 @@ app.post("/CreateAccount", (req, res) => {
     });
 });
 
-app.post("/deleteUser/:userid", (req, res) => {
+app.post("/deleteUser/:userid", isAuthenticated, (req, res) => {
   const id = req.params.userid; // Declare 'id' first
   console.log("ID to delete:", id); // Now you can use 'id'
 
@@ -200,7 +207,7 @@ app.post("/deleteUser/:userid", (req, res) => {
 });
 
 //Quote stuff//
-app.get("/submittedQuotes", (req, res) => {
+app.get("/submittedQuotes", isAuthenticated, (req, res) => {
   knex("quotes")
     .join("userlogins", "quotes.creator", "userlogins.userid")
     .select("quotes.*", "userlogins.firstname", "userlogins.lastname")
@@ -213,7 +220,7 @@ app.get("/submittedQuotes", (req, res) => {
     });
 });
 
-app.get("/editQuote/:quoteid", (req, res) => {
+app.get("/editQuote/:quoteid", isAuthenticated, (req, res) => {
   const quoteid = req.params.quoteid;
   knex("quotes")
     .leftJoin("userlogins", "userlogins.userid", "=", "quotes.creator")
@@ -245,7 +252,7 @@ app.get("/editQuote/:quoteid", (req, res) => {
     });
 });
 
-app.post("/editQuote/:quoteid", (req, res) => {
+app.post("/editQuote/:quoteid", isAuthenticated, (req, res) => {
   const quoteid = req.params.quoteid;
 
   const quotedescription = req.body.quotedescription;
@@ -278,7 +285,7 @@ app.post("/editQuote/:quoteid", (req, res) => {
     });
 });
 
-app.post("/deleteQuote/:quoteid", (req, res) => {
+app.post("/deleteQuote/:quoteid", isAuthenticated, (req, res) => {
   const quoteid = req.params.quoteid;
   knex("quotes")
     .where("quoteid", quoteid)
@@ -292,35 +299,16 @@ app.post("/deleteQuote/:quoteid", (req, res) => {
     });
 });
 
-app.get("/addQuote", (req, res) => {
+app.get("/addQuote", isAuthenticated, (req, res) => {
   res.redirect("/calculator");
 });
 
-app.get("/calculator", (req, res) => {
-  res.render("calculator", { user: "admin" });
+app.get("/calculator", isAuthenticated, (req, res) => {
+    knex('locationinfo')
+    .select('*')
+    res.render("calculator", { user: "admin" });
 });
 
-app.post("/getLocationInfo", (req, res) => {
-  const { state, county } = req.body;
-
-  knex("LocationInfo")
-    .where({ state, county })
-    .first()
-    .then((location) => {
-      if (location) {
-        res.json({
-          locationId: location.id,
-          locationRate: location.rate,
-        });
-      } else {
-        res.status(404).json({ message: "Location not found." });
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching location info:", error);
-      res.status(500).json({ message: "Internal server error." });
-    });
-});
 
 //SEARCH ROUTES
 app.get("/searchQuotes", async (req, res) => {

@@ -62,7 +62,6 @@
           <th>Last Name</th>
           <th>Email</th>
           <th>Phone</th>
-          <th>User Type</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -76,7 +75,6 @@
               <td><%= row.lastname %></td>
               <td><%= row.email %></td>
               <td><%= row.phone %></td>
-              <td><%= row.usertype %></td>
               <td>
                 <form action="/editUser/<%= row.userid %>" method="GET" style="display:inline;">
                   <button type="submit" class="button-small">Edit</button>
