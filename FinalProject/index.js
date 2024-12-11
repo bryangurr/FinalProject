@@ -395,6 +395,7 @@ app.post("/submitQuote", isAuthenticated, (req, res) => {
   let cappedyield = req.body.cappedyield;
   let priceelectionper = req.body.priceelectionper;
   let expcommodvalue = req.body.expcommodvalue;
+  console.log(req.body);
   knex("quotes")
     .insert({
       creator: creator,
