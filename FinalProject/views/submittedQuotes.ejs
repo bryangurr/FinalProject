@@ -40,7 +40,7 @@
         <!-- Search Form -->
       <form action="/searchQuotes" method="GET" class="search-form">
         <label for="searchName">Search by Creator:</label>
-          <input type="text" id="searchName" name="name" placeholder="Enter creator's name">
+          <input type="text" id="searchName" name="name" placeholder="Enter creator's name" value="<%= typeof name !== 'undefined' ? name : '' %>">
         <button type="submit" class="button-small">Search</button>
       </form>
     </header>

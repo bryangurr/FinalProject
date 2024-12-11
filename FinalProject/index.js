@@ -83,6 +83,7 @@ app.post("/login", (req, res) => {
 
         // Store user info in the session
         req.session.user = { username: userlogins.username };
+        req.session.userid = {userid: userlogins.userid};
 
         // Redirect to a protected page
         res.redirect("/calculator");
@@ -307,7 +308,7 @@ app.get("/calculator", isAuthenticated, (req, res) => {
   knex("locationinfo")
     .select("*")
     .then((locationInfo) => {
-      res.render("calculator", { user: "admin", locationInfo });
+      res.render("calculator", { user: "admin", locationInfo, userid: req.session.userid });
     });
 });
 
@@ -331,7 +332,7 @@ app.get("/searchQuotes", async (req, res) => {
       .orWhereRaw("LOWER(firstname) LIKE ?", [`%${name.toLowerCase()}%`])
       .orWhereRaw("LOWER(lastname) LIKE ?", [`%${name.toLowerCase()}%`]);
 
-    res.render("submittedQuotes", { quotes });
+    res.render("submittedQuotes", { quotes, name });
   } catch (error) {
     console.error("Error searching quotes:", error);
     res.status(500).send("Internal Server Error");
@@ -366,7 +367,7 @@ app.get("/searchUsers", async (req, res) => {
 
     const userlogins = await query;
 
-    res.render("user-management", { userlogins });
+    res.render("user-management", { userlogins, firstName, lastName });
   } catch (error) {
     console.error("Error searching users:", error);
     res.status(500).send("Internal Server Error");
