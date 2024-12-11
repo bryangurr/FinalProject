@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Edit Quote</h1>
-    <form action="/updateQuote/<%= quoteInfo.quoteid %>" method="POST">
+    <form action="/editQuote/<%= quoteInfo.quoteid %>" method="POST">
         <div>
             <label for="quotedescription">Quote Description:</label>
             <textarea id="quotedescription" name="quotedescription" required><%= quoteInfo.quotedescription %></textarea>
@@ -62,7 +62,7 @@
 
         <div>
             <button type="submit">Update Quote</button>
-            <a href="/quotes">Cancel</a> <!-- Optional: Link back to quotes list -->
+            <a href="/submittedQuotes">Cancel</a> <!-- Optional: Link back to quotes list -->
         </div>
     </form>
 </body>
