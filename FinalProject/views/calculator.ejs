@@ -68,29 +68,42 @@
 
   <script>
     function calculate() {
-      // Embed locationInfo as a JavaScript object
-      const locationInfo = <%- JSON.stringify(locationInfo) %>;
-       
+  // Embed locationInfo as a JavaScript object
+  const locationInfo = <%- JSON.stringify(locationInfo) %>;
+
+  // Get form values
+  const locationid = document.getElementById('locationid').value;
+  const curryearseed = parseFloat(document.getElementById('curryearseed').value);
+  const meansurviverate = parseFloat(document.getElementById('meansurviverate').value);
+
+  // Get result fields
+  const priceElectionPer = document.getElementById('priceelectionper');
+  const expectedYield = document.getElementById('expectedYield');
+  const expcommodvalue = document.getElementById('expcommodvalue');
+
+  // Find the selected location's rate
+  const selectedLocation = locationInfo.find(location => location.locationid == locationid);
   
-      // Get the selected location ID from the dropdown
-      const locationid = document.getElementById('locationid').value;
-      const locationRate = document.getElementById('locationRate');
-      const expectedYield = document.getElementById('expectedYield');
-      const expectedValue = document.getElementById('expectedValue');
-  
-      // Find the matching location in locationInfo
-      const selectedLocation = locationInfo.find(location => location.locationid == locationid);
-  
-      if (selectedLocation) {
-        alert('Location: ' + selectedLocation.county + ', ' + selectedLocation.state + ', ' + selectedLocation.locationrate);
-      } else {
-        alert('Location not found');
-      }
-      locationRate.value = selectedLocation.locationrate;
-      expectedYield.value = s
-    
-      
+  if (selectedLocation && !isNaN(curryearseed) && !isNaN(meansurviverate)) {
+    const rate = parseFloat(selectedLocation.locationrate);
+    if (!isNaN(rate)) {
+      const yieldResult = curryearseed * meansurviverate;
+      const valueResult = yieldResult * rate;
+
+      // Update the UI
+      priceElectionPer.value = rate.toFixed(2);
+      expectedYield.innerText = yieldResult.toFixed(2);
+      expcommodvalue.innerText = valueResult.toFixed(2);
+    } else {
+      alert('Invalid location rate.');
     }
+  } else {
+    alert('Invalid input or location not found.');
+  }
+}
+
   </script>
+  
+  
 </body>
 </html>
