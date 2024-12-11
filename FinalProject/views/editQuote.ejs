@@ -4,51 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Quote</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css"> <!-- Optional: Link to CSS -->
 </head>
 <body>
     <h1>Edit Quote</h1>
-    
-    <form action="/editQuote/<%= quoteInfo.quoteid %>" method="post">
-        <label for="quotedescription">Description:</label>
-        <textarea id="quotedescription" name="quotedescription" required><%= quoteInfo.quotedescription %></textarea>
+    <form action="/updateQuote/<%= quoteInfo.quoteid %>" method="POST">
+        <div>
+            <label for="quotedescription">Quote Description:</label>
+            <textarea id="quotedescription" name="quotedescription" required><%= quoteInfo.quotedescription %></textarea>
+        </div>
 
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" value="<%= quoteInfo.state %>" required>
+        <div>
+            <label for="locationid">Location:</label>
+            <select id="locationid" name="locationid" required>
+                <% locationInfo.forEach(location => { %>
+                    <option value="<%= location.locationid %>" <%= location.locationid === quoteInfo.locationid ? 'selected' : '' %>>
+                        <%= location.county %>, <%= location.state %> <!-- Assuming location has a 'locationname' field -->
+                    </option>
+                <% }) %>
+            </select>
+        </div>
 
-        <label for="county">County:</label>
-        <input type="text" id="county" name="county" value="<%= quoteInfo.county %>" required>
+        <div>
+            <label for="quoteyear">Quote Year:</label>
+            <input type="number" id="quoteyear" name="quoteyear" value="<%= quoteInfo.quoteyear %>" required>
+        </div>
 
-        <label for="locationrate">Location Rate:</label>
-        <input type="number" step="0.01" id="locationrate" name="locationrate" value="<%= quoteInfo.locationrate %>" required>
+        <div>
+            <label for="meansurviverate">Mean Survival Rate:</label>
+            <input type="number" id="meansurviverate" name="meansurviverate" value="<%= quoteInfo.meansurviverate %>" step="0.01" required>
+        </div>
 
-        <label for="quoteyear">Quote Year:</label>
-        <input type="number" id="quoteyear" name="quoteyear" value="<%= quoteInfo.quoteyear %>" required>
+        <div>
+            <label for="curryearseed">Current Year Seed:</label>
+            <input type="number" id="curryearseed" name="curryearseed" value="<%= quoteInfo.curryearseed %>" required>
+        </div>
 
-        <label for="meansurviverate">Mean Survive Rate:</label>
-        <input type="number" step="0.01" id="meansurviverate" name="meansurviverate" value="<%= quoteInfo.meansurviverate %>" required>
+        <div>
+            <label for="cappedyield">Capped Yield:</label>
+            <input type="number" id="cappedyield" name="cappedyield" value="<%= quoteInfo.cappedyield %>" step="0.01" required>
+        </div>
 
-        <label for="curryearseed">Current Year Seed:</label>
-        <input type="number" step="0.01" id="curryearseed" name="curryearseed" value="<%= quoteInfo.curryearseed %>" required>
+        <div>
+            <label for="priceelectionper">Price Election Per:</label>
+            <input type="number" id="priceelectionper" name="priceelectionper" value="<%= quoteInfo.priceelectionper %>" step="0.01" required>
+        </div>
 
-        <label for="cappedyield">Capped Yield:</label>
-        <input type="number" step="0.01" id="cappedyield" name="cappedyield" value="<%= quoteInfo.cappedyield %>" required>
+        <div>
+            <label for="expcommodvalue">Expected Commodity Value:</label>
+            <input type="number" id="expcommodvalue" name="expcommodvalue" value="<%= quoteInfo.expcommodvalue %>" step="0.01" required>
+        </div>
 
-        <label for="priceelectionper">Price Election Per:</label>
-        <input type="number" step="0.01" id="priceelectionper" name="priceelectionper" value="<%= quoteInfo.priceelectionper %>" required>
+        <div>
+            <label>Creator:</label>
+            <p><%= quoteInfo.firstname %> <%= quoteInfo.lastname %></p> <!-- Display creator's name as non-editable -->
+        </div>
 
-        <label for="expcommodvalue">Expected Commodity Value:</label>
-        <input type="number" step="0.01" id="expcommodvalue" name="expcommodvalue" value="<%= quoteInfo.expcommodvalue %>" required>
-
-        <fieldset>
-            <legend>Creator Information</legend>
-            <p>First Name: <%= quoteInfo.firstname %></p>
-            <p>Last Name: <%= quoteInfo.lastname %></p>
-        </fieldset>
-
-        <button type="submit">Update Quote</button>
+        <div>
+            <button type="submit">Update Quote</button>
+            <a href="/quotes">Cancel</a> <!-- Optional: Link back to quotes list -->
+        </div>
     </form>
-
-    <a href="/quotes">Back to Quotes List</a>
 </body>
 </html>
