@@ -5,64 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Quote</title>
     <link rel="stylesheet" href="/submittedQuotes.css"> <!-- Optional: Link to CSS -->
+    <link rel="stylesheet" href="/edit.css">
 </head>
 <body>
     <h1>Edit Quote</h1>
-    <form action="/editQuote/<%= quoteInfo.quoteid %>" method="POST">
+    <form action="/updateQuote/<%= quoteInfo.quoteid %>" method="POST">
         <div>
             <label for="quotedescription">Quote Description:</label>
             <textarea id="quotedescription" name="quotedescription" required><%= quoteInfo.quotedescription %></textarea>
         </div>
 
-        <div>
-            <label for="locationid">Location:</label>
-            <select id="locationid" name="locationid" required>
-                <% locationInfo.forEach(location => { %>
-                    <option value="<%= location.locationid %>" <%= location.locationid === quoteInfo.locationid ? 'selected' : '' %>>
-                        <%= location.county %>, <%= location.state %> <!-- Assuming location has a 'locationname' field -->
-                    </option>
-                <% }) %>
-            </select>
-        </div>
+            <!-- Location -->
+            <div class="form-group">
+                <label for="locationid">Location:</label>
+                <select id="locationid" name="locationid" required>
+                    <% locationInfo.forEach(location => { %>
+                        <option value="<%= location.locationid %>" <%= location.locationid === quoteInfo.locationid ? 'selected' : '' %>>
+                            <%= location.county %>, <%= location.state %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
 
-        <div>
-            <label for="quoteyear">Quote Year:</label>
-            <input type="number" id="quoteyear" name="quoteyear" value="<%= quoteInfo.quoteyear %>" required>
-        </div>
+            <!-- Additional Fields -->
+            <% const fields = [
+                { id: 'quoteyear', label: 'Quote Year', value: quoteInfo.quoteyear, step: '1' },
+                { id: 'meansurviverate', label: 'Mean Survival Rate', value: quoteInfo.meansurviverate, step: '0.01' },
+                { id: 'curryearseed', label: 'Current Year Seed', value: quoteInfo.curryearseed },
+                { id: 'cappedyield', label: 'Capped Yield', value: quoteInfo.cappedyield, step: '0.01' },
+                { id: 'priceelectionper', label: 'Price Election Per', value: quoteInfo.priceelectionper, step: '0.01' },
+                { id: 'expcommodvalue', label: 'Expected Commodity Value', value: quoteInfo.expcommodvalue, step: '0.01' }
+            ]; %>
+            <% fields.forEach(field => { %>
+                <div class="form-group">
+                    <label for="<%= field.id %>"><%= field.label %>:</label>
+                    <input type="number" id="<%= field.id %>" name="<%= field.id %>" value="<%= field.value %>" step="<%= field.step || '1' %>" required>
+                </div>
+            <% }) %>
 
-        <div>
-            <label for="meansurviverate">Mean Survival Rate:</label>
-            <input type="number" id="meansurviverate" name="meansurviverate" value="<%= quoteInfo.meansurviverate %>" step="0.01" required>
-        </div>
-
-        <div>
-            <label for="curryearseed">Current Year Seed:</label>
-            <input type="number" id="curryearseed" name="curryearseed" value="<%= quoteInfo.curryearseed %>" required>
-        </div>
-
-        <div>
-            <label for="cappedyield">Capped Yield:</label>
-            <input type="number" id="cappedyield" name="cappedyield" value="<%= quoteInfo.cappedyield %>" step="0.01" required>
-        </div>
-
-        <div>
-            <label for="priceelectionper">Price Election Per:</label>
-            <input type="number" id="priceelectionper" name="priceelectionper" value="<%= quoteInfo.priceelectionper %>" step="0.01" required>
-        </div>
-
-        <div>
-            <label for="expcommodvalue">Expected Commodity Value:</label>
-            <input type="number" id="expcommodvalue" name="expcommodvalue" value="<%= quoteInfo.expcommodvalue %>" step="0.01" required>
-        </div>
-
-        <div>
-            <label>Creator:</label>
-            <p><%= quoteInfo.firstname %> <%= quoteInfo.lastname %></p> <!-- Display creator's name as non-editable -->
-        </div>
+            <!-- Creator -->
+            <div class="form-group">
+                <label>Creator:</label>
+                <p class="creator"><%= quoteInfo.firstname %> <%= quoteInfo.lastname %></p>
+            </div>
 
         <div>
             <button type="submit">Update Quote</button>
-            <a href="/submittedQuotes">Cancel</a> <!-- Optional: Link back to quotes list -->
+            <a href="/quotes">Cancel</a> <!-- Optional: Link back to quotes list -->
         </div>
     </form>
 </body>
