@@ -71,12 +71,28 @@
 
   <script>
     function calculate() {
-    let locationid = document.getElementById('locationid');
-    locationInfo.forEach(location => {
-      if (locationInfo.locationid == locationid) {
-        alert('Location: ' + locationInfo.county);
+      // Embed locationInfo as a JavaScript object
+      const locationInfo = <%- JSON.stringify(locationInfo) %>;
+       
+  
+      // Get the selected location ID from the dropdown
+      const locationid = document.getElementById('locationid').value;
+      const locationRate = document.getElementById('locationRate');
+      const expectedYield = document.getElementById('expectedYield');
+      const expectedValue = document.getElementById('expectedValue');
+  
+      // Find the matching location in locationInfo
+      const selectedLocation = locationInfo.find(location => location.locationid == locationid);
+  
+      if (selectedLocation) {
+        alert('Location: ' + selectedLocation.county + ', ' + selectedLocation.state + ', ' + selectedLocation.locationrate);
+      } else {
+        alert('Location not found');
       }
-    })
+      locationRate.value = selectedLocation.locationrate;
+      expectedYield.value = s
+    
+      
     }
   </script>
 </body>

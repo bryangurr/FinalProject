@@ -83,6 +83,7 @@ app.post("/login", (req, res) => {
 
         // Store user info in the session
         req.session.user = { username: userlogins.username };
+        req.session.userid = {userid: userlogins.userid};
 
         // Redirect to a protected page
         res.redirect("/calculator");
@@ -307,7 +308,7 @@ app.get("/calculator", isAuthenticated, (req, res) => {
   knex("locationinfo")
     .select("*")
     .then((locationInfo) => {
-      res.render("calculator", { user: "admin", locationInfo });
+      res.render("calculator", { user: "admin", locationInfo, userid: req.session.userid });
     });
 });
 
