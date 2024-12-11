@@ -4,113 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Creation Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 500px; /* Made the box wider */
-            padding: 2rem;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            margin: auto;
-        }
-
-        h1 {
-            margin-bottom: 1rem;
-            color: #333;
-            font-size: 1.5rem;
-        }
-
-        form .form-group {
-            margin-bottom: 1.2rem;
-            text-align: left;
-        }
-
-        form label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-size: 0.9rem;
-        }
-
-        form input[type="text"],
-        form input[type="password"] {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            background-color: #f8f8f8;
-            margin-bottom: 1.2rem;
-            box-sizing: border-box; /* Ensures inputs fit inside the box */
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 4px;
-            background-color: #809f3b;
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .login-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Create Account</title>
+    <link rel="stylesheet" href="/edit.css">
 </head>
 
 <body>
-    <div class="container">
-        <div class="login-box">
-            <h1>Account Creation Page</h1>
-            <form action="/CreateAccount" method="POST" class="CreateAccount">
-                <div class="form-group">
-                    <label for="firstname">First Name</label>
-                    <input type="text" id="firstname" name="firstname" placeholder="Enter your first name" required>
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Last Name</label>
-                    <input type="text" id="lastname" name="lastname" placeholder="Enter your last name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" name="email" placeholder="Enter your email address" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
-                </div>
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Create a username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Create a password" required>
-                </div>
-                <button type="submit" class="login-button">Create Account</button>
-            </form>
+    <header>
+        <div class="banner">
+            <div class="left-buttons">
+                <button onclick="window.location.href='/user-management'" class="button">Back to User Management</button>
+            </div>
+            <h1>Create Account</h1>
         </div>
-    </div>
+    </header>
+
+    <main>
+        <form action="/CreateAccount" method="POST" class="edit-form">
+            <!-- First Name -->
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" placeholder="Enter your first name" required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" placeholder="Enter your last name" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Create a username" required>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="button">Create Account</button>
+                <a href="/user-management" class="button cancel-button">Cancel</a>
+            </div>
+        </form>
+    </main>
 </body>
 
 </html>
