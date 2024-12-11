@@ -291,6 +291,10 @@ app.post("/deleteQuote/:quoteid", (req, res) => {
     });
 });
 
+app.get("/addQuote", (req, res) => {
+  res.redirect("/calculator");
+});
+
 app.get("/calculator", (req, res) => {
   res.render("calculator", { user: "admin" });
 });
