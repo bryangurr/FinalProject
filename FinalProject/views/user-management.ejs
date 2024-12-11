@@ -22,10 +22,10 @@
     <!--search bar-->
     <form action="/searchUsers" method="GET" class="search-form">
       <label for="searchFirstName">First Name:</label>
-      <input type="text" id="searchFirstName" name="firstName" placeholder="Enter first name">
+      <input type="text" id="searchFirstName" name="firstName" placeholder="Enter first name" value="<%= typeof firstName !== 'undefined' ? firstName : '' %>">
   
       <label for="searchLastName">Last Name:</label>
-      <input type="text" id="searchLastName" name="lastName" placeholder="Enter last name">
+      <input type="text" id="searchLastName" name="lastName" placeholder="Enter last name" value="<%= typeof lastName !== 'undefined' ? lastName : '' %>">
   
       <button type="submit" class="button-small">Search</button>
     </form>

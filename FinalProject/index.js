@@ -332,7 +332,7 @@ app.get("/searchQuotes", async (req, res) => {
       .orWhereRaw("LOWER(firstname) LIKE ?", [`%${name.toLowerCase()}%`])
       .orWhereRaw("LOWER(lastname) LIKE ?", [`%${name.toLowerCase()}%`]);
 
-    res.render("submittedQuotes", { quotes });
+    res.render("submittedQuotes", { quotes, name });
   } catch (error) {
     console.error("Error searching quotes:", error);
     res.status(500).send("Internal Server Error");
@@ -367,12 +367,24 @@ app.get("/searchUsers", async (req, res) => {
 
     const userlogins = await query;
 
-    res.render("user-management", { userlogins });
+    res.render("user-management", { userlogins, firstName, lastName });
   } catch (error) {
     console.error("Error searching users:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.error("Error logging out:", err);
+          res.status(500).send("Error logging out.");
+      } else {
+          res.redirect("/");
+      }
+  });
+});
+
 
 app.listen(port, () =>
   console.log(`Server is running at http://localhost:${port}`)
