@@ -53,11 +53,11 @@ app.get("/login", (req, res) => {
 });
 
 function isAuthenticated(req, res, next) {
-    if (req.session.user) {
-      return next(); // User is authenticated, proceed
-    }
-    res.redirect("/login"); // Redirect to login if not authenticated
-  };
+  if (req.session.user) {
+    return next(); // User is authenticated, proceed
+  }
+  res.redirect("/login"); // Redirect to login if not authenticated
+}
 
 // Login page submission.
 // TODO: validate username and password in DB and don't send over the password.
@@ -304,13 +304,12 @@ app.get("/addQuote", isAuthenticated, (req, res) => {
 });
 
 app.get("/calculator", isAuthenticated, (req, res) => {
-    knex('locationinfo')
-    .select('*')
-    .then(locationInfo => {
-        res.render("calculator", { user: "admin", locationInfo });
-    }) 
+  knex("locationinfo")
+    .select("*")
+    .then((locationInfo) => {
+      res.render("calculator", { user: "admin", locationInfo });
+    });
 });
-
 
 //SEARCH ROUTES
 app.get("/searchQuotes", async (req, res) => {
@@ -350,8 +349,7 @@ app.get("/searchUsers", async (req, res) => {
       "firstname",
       "lastname",
       "email",
-      "phone",
-      "usertype"
+      "phone"
     );
 
     if (firstName) {
@@ -368,7 +366,7 @@ app.get("/searchUsers", async (req, res) => {
 
     const userlogins = await query;
 
-    res.render("userManagement", { userlogins });
+    res.render("user-management", { userlogins });
   } catch (error) {
     console.error("Error searching users:", error);
     res.status(500).send("Internal Server Error");
