@@ -306,7 +306,9 @@ app.get("/addQuote", isAuthenticated, (req, res) => {
 app.get("/calculator", isAuthenticated, (req, res) => {
     knex('locationinfo')
     .select('*')
-    res.render("calculator", { user: "admin" });
+    .then(locationInfo => {
+        res.render("calculator", { user: "admin", locationInfo });
+    }) 
 });
 
 
@@ -372,18 +374,6 @@ app.get("/searchUsers", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-      if (err) {
-          console.error("Error logging out:", err);
-          res.status(500).send("Error logging out.");
-      } else {
-          res.redirect("/login");
-      }
-  });
-});
-
 
 app.listen(port, () =>
   console.log(`Server is running at http://localhost:${port}`)

@@ -21,39 +21,19 @@
       </div>
     </div>
   </header>
-  <script>
-    // Function to update the county options based on the selected state
-    function updateCountyOptions() {
-      const state = document.getElementById('state').value;
-      const countySelect = document.getElementById('county');
-      countySelect.innerHTML = ''; // Clear previous options
-
-      if (state === 'Florida') {
-        const floridaCounties = ['Gulf', 'Wakulla', 'Indian River'];
-        floridaCounties.forEach(county => {
-          countySelect.innerHTML += `<option value="${county}">${county}</option>`;
-        });
-      } else if (state === 'Alabama') {
-        const alabamaCounties = ['Mobile', 'Baldwin'];
-        alabamaCounties.forEach(county => {
-          countySelect.innerHTML += `<option value="${county}">${county}</option>`;
-        });
-      }
-    }
-  </script>
-
+  
   <form id="quoteForm" method="POST" action="/submitQuote">
     <label for="description">Quote Description</label>
     <input type="text" id="description" name="description" required>
 
-    <label for="state">State</label>
-    <select id="state" name="state" required onchange="updateCountyOptions()">
-      <option value="Florida">Florida</option>
-      <option value="Alabama">Alabama</option>
-    </select>
-
-    <label for="county">County</label>
-    <select id="county" name="county" required></select>
+    <label for="locationid">Location:</label>
+                <select id="locationid" name="locationid" required>
+                    <% locationInfo.forEach(location => { %>
+                        <option value="<%= location.locationid %>" <%= location.locationid === quoteInfo.locationid ? 'selected' : '' %>>
+                            <%= location.county %>, <%= location.state %>
+                        </option>
+                    <% }) %>
+                </select>
 
     <label for="quoteYear">Quote Year</label>
     <input type="number" id="quoteYear" name="quoteYear" value="<%= new Date().getFullYear() %>" readonly>
