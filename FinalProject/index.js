@@ -373,6 +373,18 @@ app.get("/searchUsers", async (req, res) => {
   }
 });
 
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          console.error("Error logging out:", err);
+          res.status(500).send("Error logging out.");
+      } else {
+          res.redirect("/");
+      }
+  });
+});
+
+
 app.listen(port, () =>
   console.log(`Server is running at http://localhost:${port}`)
 ); // Start listening
