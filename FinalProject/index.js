@@ -90,19 +90,7 @@ app.post("/login", (req, res) => {
     });
 });
 
-// Route to account creation page
-app.get("/create-account", (req, res) => {
-  res.render("createAccount");
-});
 
-// Route to Guest Calculator
-app.get("/guest", (req, res) => {
-  res.render("calculator", {
-    sUsername: "guest",
-    sPassword: "guest",
-    sUserType: "guest",
-  });
-});
 
 app.get("/calculator", (req, res) => {
   res.render("calculator", { user: "admin" });
@@ -141,8 +129,9 @@ app.get("/editUser/:id", (req, res) => {
     });
 });
 
-app.post("/editUser/:userid", (req, res) => {
-  const userid = req.params.userid; // Get userid from URL
+app.post("/editUser/:id", (req, res) => {
+    console.log("Editing user with ID:", userid);
+  const userid = req.params.id; // Get userid from URL
   let username = req.body.username;
   let password = req.body.password;
   let firstname = req.body.firstname;
@@ -172,21 +161,27 @@ app.post("/editUser/:userid", (req, res) => {
     });
 });
 
+// Route to account creation page
+app.get("/createAccount", (req, res) => {
+    res.render("createAccount");
+  });
+  
+
 app.post("/CreateAccount", (req, res) => {
-  let sFirstName = req.body.first_name;
-  let sLastName = req.body.last_name;
+  let sFirstName = req.body.firstname;
+  let sLastName = req.body.lastname;
   let sEmail = req.body.email;
   let sPhone = req.body.phone;
   let sUsername = req.body.username;
   let sPassword = req.body.password;
-  knex("users")
+  knex("userlogins")
     .insert({
       username: sUsername,
       password: sPassword,
-      first_name: sFirstName,
-      last_name: sLastName,
+      firstname: sFirstName,
+      lastname: sLastName,
       email: sEmail,
-      user_type: 3,
+      phone: sPhone
     })
     .then(() => {
       res.redirect("/user-management");
