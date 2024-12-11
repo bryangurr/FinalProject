@@ -385,6 +385,37 @@ app.get("/logout", (req, res) => {
   });
 });
 
+app.post("/submitQuote", isAuthenticated, (req, res) => {
+  let creator = req.body.userid;
+  let quotedescription = req.body.quotedescription;
+  let locationid = req.body.locationid;
+  let quoteyear = req.body.quoteyear;
+  let meansurviverate = req.body.meansurviverate;
+  let curryearseed = req.body.curryearseed;
+  let cappedyield = req.body.cappedyield;
+  let priceelectionper = req.body.priceelectionper;
+  let expcommodvalue = req.body.expcommodvalue;
+  knex("quotes")
+    .insert({
+      creator: creator,
+      quotedescription: quotedescription,
+      locationid: locationid,
+      quoteyear: quoteyear,
+      meansurviverate: meansurviverate,
+      curryearseed: curryearseed,
+      cappedyield: cappedyield,
+      priceelectionper: priceelectionper,
+      expcommodvalue: expcommodvalue
+    })
+    .then(() => {
+      res.redirect("/calculator");
+    })
+    .catch((error) => {
+      console.error("Error adding User:", error);
+      res.status(500).send("Internal Server Error");
+    });
+});
+
 
 app.listen(port, () =>
   console.log(`Server is running at http://localhost:${port}`)
